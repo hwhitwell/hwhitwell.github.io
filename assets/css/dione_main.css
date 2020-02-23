@@ -683,6 +683,12 @@ h6 {
     font-size: 18px;
     padding: 18px 35px;
 }
+
+.btn.btn-xx-large {
+    font-size: 63px;
+    padding: 18px 35px;
+    white-space:normal;
+}
 .btn.btn-hover-transparent:hover {
     background-color: transparent !important;
 }
