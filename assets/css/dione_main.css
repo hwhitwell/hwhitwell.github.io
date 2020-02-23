@@ -1539,6 +1539,9 @@ h6 {
     opacity: 0.97;
 }
 
+.features-box {
+    margin-bottom:30px;
+}
 
 
 
@@ -4832,6 +4835,6 @@ section {
 
 @media (min-width: 992px) {
     section {
-        padding: 135px 0;
+        padding: 60px 0;
     }
 }
