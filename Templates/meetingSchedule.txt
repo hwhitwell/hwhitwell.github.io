@@ -1,0 +1,235 @@
+MEETING SCHEDULE TEMPLATE:
+
+COPY ALL TEXT below and paste into index.html between "<!-- Section - Schedule Start -->" and "<!-- //Section - Schedule End -->"
+
+                <section id="schedule" class="bg-white-3">
+        <div class="container">
+            <div class="row no-padding-rl no-padding-top padding-8">
+                <div class="col-md-8 col-md-offset-2 text-center">
+                    <h3 class="font-family-alt font-weight-700 letter-spacing-2 text-uppercase xs-title-small title-medium title-sideline-base-color">Programme</h3>
+                    <p class="font-family-alt margin-3 no-margin-bottom no-margin-rl text-gray-dark-2 text-large">for 3rd April 2020 Time TBA <br>Last updated 21st March 2020</p>
+                </div>
+                <!-- //.col-md-8 -->
+            </div>
+            <!-- //.row -->
+            
+            <!-- SCHEDULE START -->                  
+            <div class="row">
+                <div class="col-md-4">
+                    <span class="display-inline-block font-family-alt font-weight-700 letter-spacing-1 text-extra-large text-uppercase title-underline-thick-base-color">Sponsors</span>
+                    
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade active in" id="day-1">
+                            <table class="table table-bordered table-striped margin-8 no-margin-rl">
+                                <tr>
+                                    <td class="td-session-number sm-padding-2 padding-4"><span class="display-block font-family-alt text-medium text-gray-dark-2"><a href="#sponsors" class="page-scroll">Primary Sponsor</a></span></td>
+                                    <td class="sm-padding-2 padding-4"><span class="display-block font-family-alt text-gray-dark-2 text-medium text-uppercase"><a href="#sponsors" class="page-scroll">Bruker</a> <span class="text-gray-dark text-small text-transform-none">Plenary talk: Dr Roman Fischer</span></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="td-session-number sm-padding-2 padding-4"><span class="display-block font-family-alt text-medium text-gray-dark-2"><a href="#sponsors" class="page-scroll">Secondary Sponsor</a></span></td>
+                                    <td class="sm-padding-2 padding-4"><span class="display-block font-family-alt text-gray-dark-2 text-medium text-uppercase"><a href="#sponsors" class="page-scroll">Evosep</a> <span class="text-gray-dark text-small text-transform-none"></span></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="td-session-number sm-padding-2 padding-4"><span class="display-block font-family-alt text-medium text-gray-dark-2"><a href="#sponsors" class="page-scroll">Tertiary Sponsor</a></span></td>
+                                    <td class="sm-padding-2 padding-4"><span class="display-block font-family-alt text-gray-dark-2 text-medium text-uppercase"><a href="#sponsors" class="page-scroll">ClusterMarket</a> <span class="text-gray-dark text-small text-transform-none">Sponsor presentation</span></span></td>
+                                </tr>
+                            </table>
+                            <span class="display-block font-family-alt letter-spacing-1 text-gray-dark-2 text-medium text-uppercase"> <img src="assets/images/LPDGlogo_intext.jpg" alt=""/></span>
+                        </div>
+                        <!-- //.tab-pane -->
+                    </div>
+                    <!-- //.tab-content -->
+                </div>
+                <!-- //.col-md-4 -->
+                
+                <div class="col-md-7 col-md-offset-1">
+                    <div class="row carousel-schedule">
+                        <div class="carousel-cell col-md-12">
+                            <div class="position-relative">
+                                <div class="position-relative">
+                                    <span class="display-block font-family-alt font-weight-700 letter-spacing-1 text-extra-large text-uppercase">Session 1</span>
+                                    <span class="display-block margin-1 no-margin-bottom no-margin-rl text-gray-dark-2 text-large">12.00 - 13.45</span>
+                                    <span class="bg-base-color margin-3 no-margin-bottom no-margin-rl separator-line-thick"></span>
+                                </div>
+                                <!-- //.position-relative -->  
+
+                                <div class="timeline sm-margin-5 margin-10 sm-no-margin-bottom no-margin-bottom sm-no-margin-rl no-margin-rl position-relative">
+                                    <span class="timeline-label bg-base-color border-round display-inline-block font-family-alt letter-spacing-1 padding-tb-9px padding-rl-13px text-extra-small text-uppercase text-white">Schedules</span>
+
+                                    <ul class="border-left border-gray-light list-unstyled position-relative">
+                                        <li class="timeline-item position-relative">
+                                            <div class="timeline-content bg-white border border-gray-light border-round display-block">
+                                                <span class="display-block font-family-alt letter-spacing-1 text-gray-dark text-small">12.00</span>
+                                                <span class="display-block font-family-alt text-medium text-gray-dark-2">Lunch and refreshments available</span>
+                                            </div>
+                                            <!-- //.timeline-content -->
+                                        </li>
+                                        
+                                        <li class="timeline-item highlight position-relative">
+                                            <div class="timeline-content bg-white border border-gray-light border-round display-block">
+                                                <span class="display-block font-family-alt letter-spacing-1 text-gray-dark text-small">12.30</span>
+                                                <span class="display-block font-family-alt text-medium text-gray-dark-2">
+                                                    Talk 1: <span class="text-gray-dark-2 text-uppercase">Dr Roman Fischer</span> <span class="text-small">Plenary</span>.
+                                                </span>
+                                            </div>
+                                            <!-- //.timeline-content -->
+                                        </li>
+
+                                        <li class="timeline-item highlight position-relative">
+                                            <div class="timeline-content bg-white border border-gray-light border-round display-block">
+                                                <span class="display-block font-family-alt letter-spacing-1 text-gray-dark text-small">13:15 AM</span>
+                                                <span class="display-block font-family-alt text-medium text-gray-dark-2">
+                                                    Talk 2: <span class="text-gray-dark-2 text-uppercase">Dr Pedro Casado Izquierdo</span> <span class="text-small"></span>.
+                                                </span>
+                                            </div>
+                                            <!-- //.timeline-content -->
+                                        </li>
+
+                                        <li class="timeline-item position-relative">
+                                            <div class="timeline-content bg-white border border-gray-light border-round display-block">
+                                                <span class="display-block font-family-alt letter-spacing-1 text-gray-dark text-small">13:45</span>
+                                                <span class="display-block font-family-alt text-medium text-gray-dark-2">Refreshment break</span>
+                                            </div>
+                                            <!-- //.timeline-content -->
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- //.timeline -->
+                            </div>
+                            <!-- //.position-relative -->
+                        </div>
+                        <!-- //.carousel-cell -->
+                        
+                        <div class="carousel-cell col-md-12">
+                            <div class="position-relative">
+                                <div class="position-relative">
+                                    <span class="display-block font-family-alt font-weight-700 letter-spacing-1 text-extra-large text-uppercase">Session 2</span>
+                                    <span class="display-block margin-1 no-margin-bottom no-margin-rl text-gray-dark-2 text-large">14.00-15.00</span>
+                                    <span class="bg-base-color margin-3 no-margin-bottom no-margin-rl separator-line-thick"></span>
+                                </div>
+                                <!-- //.position-relative -->  
+
+                                <div class="timeline sm-margin-5 margin-10 sm-no-margin-bottom no-margin-bottom sm-no-margin-rl no-margin-rl position-relative">
+                                    <span class="timeline-label bg-base-color border-round display-inline-block font-family-alt letter-spacing-1 padding-tb-9px padding-rl-13px text-extra-small text-uppercase text-white">Schedules</span>
+
+                                    <ul class="border-left border-gray-light list-unstyled position-relative">
+                                        <li class="timeline-item highlight position-relative">
+                                            <div class="timeline-content bg-white border border-gray-light border-round display-block">
+                                                <span class="display-block font-family-alt letter-spacing-1 text-gray-dark text-small">14.00</span>
+                                                <span class="display-block font-family-alt text-medium text-gray-dark-2">
+                                                <span class="text-gray-dark-2 text-uppercase">Methods challenge</span>
+                                            </span>
+                                            </div>
+                                            <!-- //.timeline-content -->
+                                        </li>
+                                        <li class="timeline-item highlight position-relative">
+                                            <div class="timeline-content bg-white border border-gray-light border-round display-block">
+                                                <span class="display-block font-family-alt letter-spacing-1 text-gray-dark text-small">15.00</span>
+                                                <span class="display-block font-family-alt text-medium text-gray-dark-2">
+                                                Talk 3: <span class="text-gray-dark-2 text-uppercase">Dr Pedro Cutillas</span>
+                                                </span>
+                                            </div>
+                                            <!-- //.timeline-content -->
+                                        </li>
+                                        
+                                        <li class="timeline-item highlight position-relative">
+                                            <div class="timeline-content bg-white border border-gray-light border-round display-block">
+                                                <span class="display-block font-family-alt letter-spacing-1 text-gray-dark text-small">15.30</span>
+                                                <span class="display-block font-family-alt text-medium text-gray-dark-2">
+                                                Talk 4: <span class="text-gray-dark-2 text-uppercase">Dr Jennifer Ward</span> <span class="text-small"></span>.
+                                                </span>
+                                            </div>
+                                            <!-- //.timeline-content -->
+                                        </li>
+
+                                        <li class="timeline-item position-relative">
+                                            <div class="timeline-content bg-white border border-gray-light border-round display-block">
+                                                <span class="display-block font-family-alt letter-spacing-1 text-gray-dark text-small">16:00</span>
+                                                <span class="display-block font-family-alt text-medium text-gray-dark-2">Refreshment break</span>
+                                            </div>
+                                            <!-- //.timeline-content -->
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- //.timeline -->
+                            </div>
+                            <!-- //.position-relative -->
+                        </div>
+                        <!-- //.carousel-cell -->
+                        
+                        <div class="carousel-cell col-md-12">
+                            <div class="position-relative">
+                                <div class="position-relative">
+                                    <span class="display-block font-family-alt font-weight-700 letter-spacing-1 text-extra-large text-uppercase">Session 3</span>
+                                    <span class="display-block margin-1 no-margin-bottom no-margin-rl text-gray-dark-2 text-large">15.00-18.00</span>
+                                    <span class="bg-base-color margin-3 no-margin-bottom no-margin-rl separator-line-thick"></span>
+                                </div>
+                                <!-- //.position-relative -->  
+
+                                <div class="timeline sm-margin-5 margin-10 sm-no-margin-bottom no-margin-bottom sm-no-margin-rl no-margin-rl position-relative">
+                                    <span class="timeline-label bg-base-color border-round display-inline-block font-family-alt letter-spacing-1 padding-tb-9px padding-rl-13px text-extra-small text-uppercase text-white">Schedules</span>
+
+                                    <ul class="border-left border-gray-light list-unstyled position-relative">
+                                        <li class="timeline-item highlight position-relative">
+                                            <div class="timeline-content bg-white border border-gray-light border-round display-block">
+                                                <span class="display-block font-family-alt letter-spacing-1 text-gray-dark text-small">16:10</span>
+                                                <span class="display-block font-family-alt text-medium text-gray-dark-2">
+                                                <span class="text-gray-dark-2 text-uppercase">YPIC</span> <span class="text-small">EuPA - Young Proteomics Investigators Club</span>
+                                            </span>
+                                            </div>
+                                            <!-- //.timeline-content -->
+                                        </li>
+
+                                        <li class="timeline-item highlight position-relative">
+                                            <div class="timeline-content bg-white border border-gray-light border-round display-block">
+                                                <span class="display-block font-family-alt letter-spacing-1 text-gray-dark text-small">16.20</span>
+                                                <span class="display-block font-family-alt text-medium text-gray-dark-2">
+                                                    <span class="text-gray-dark-2 text-uppercase">ClusterMarket</span> <span class="text-small">Sponser presentation</span>.
+                                                </span>
+                                            </div>
+                                            <!-- //.timeline-content -->
+                                        </li>
+
+                                        <li class="timeline-item highlight position-relative">
+                                            <div class="timeline-content bg-white border border-gray-light border-round display-block">
+                                                <span class="display-block font-family-alt letter-spacing-1 text-gray-dark text-small">16.30</span>
+                                                <span class="display-block font-family-alt text-medium text-gray-dark-2">
+                                                    <span class="text-gray-dark-2 text-uppercase">Methods challenge</span> <span class="text-small">Conclusion, judging and prizes</span>.
+                                                </span>
+                                            </div>
+                                            <!-- //.timeline-content -->
+                                        </li>
+
+                                        <li class="timeline-item position-relative">
+                                            <div class="timeline-content bg-white border border-gray-light border-round display-block">
+                                                <span class="display-block font-family-alt letter-spacing-1 text-gray-dark text-small">17.00</span>
+                                                <span class="display-block font-family-alt text-medium text-gray-dark-2">Pizza and drinks</span>
+                                            </div>
+                                            <!-- //.timeline-content -->
+                                        </li>
+
+                                        <li class="timeline-item position-relative">
+                                            <div class="timeline-content bg-white border border-gray-light border-round display-block">
+                                                <span class="display-block font-family-alt letter-spacing-1 text-gray-dark text-small">17.30</span>
+                                                <span class="display-block font-family-alt text-medium text-gray-dark-2">Pub! <span class="text-small">Post-meeting discussion at a nearby pub (TBC)</span>.
+                                                </span>
+                                            </div>
+                                            <!-- //.timeline-content -->
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- //.timeline -->
+                            </div>
+                            <!-- //.position-relative -->
+                        </div>
+                        <!-- //.carousel-cell -->
+                    </div>
+                    <!-- //.row -->
+                </div>
+                <!-- //.col-md-7 -->
+            </div>
+            <!-- //.row -->
+            <!-- SHEDULE END -->
+        </div>
+        <!-- //.container -->
+    </section>
