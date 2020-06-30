@@ -1,2 +1,2 @@
 # hwhitwell.github.io
-LPDG Website
+Website for London Proteomics Discussion Group
