@@ -63,8 +63,12 @@
 * Home BG Parallax
 */
 
-#home-bg-parallax > .bg-parallax {
+#home-bg-parallax-challenge > .bg-parallax {
     background: url("../images/challenge/minichallenge_padded.jpg");
+}
+
+#home-bg-parallax > .bg-parallax {
+    background: url("../images/LPDGlogo.jpg");
 }
 
 
