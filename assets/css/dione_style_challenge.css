@@ -64,7 +64,7 @@
 */
 
 #home-bg-parallax > .bg-parallax {
-    background: url("../images/LPDGlogo.jpg");
+    background: url("../images/challenge/minichallenge_padded.jpg");
 }
 
 
@@ -200,14 +200,6 @@
     background-position: center bottom !important;
 }
 
-/*------------------------------------*\
-    Section - Challenge
-\*------------------------------------*/
-
-#challenge {
-    background-image: url("../images/challenge/minichallenge.jpg");
-    background-position: center bottom !important;
-}
 
 
 
