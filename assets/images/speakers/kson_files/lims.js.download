@@ -1,0 +1,929 @@
+
+function setFreezerCascadeValue(idPrefix, urlPrefix, fId, dId, cId, tId) {	
+	console.log("In setFreezerCascadeValue for " + idPrefix);
+		
+	var url = urlPrefix + "freezers/json";
+	
+	$.getJSON(url).done(function(data) {   				
+
+		$("#" + idPrefix + "_freezer").empty();
+		$("#" + idPrefix + "_door").empty();
+		$("#" + idPrefix + "_column").empty();
+		$("#" + idPrefix + "_tray").empty();
+		
+		$("#" + idPrefix + "_freezer").append($("<option/>").val('').text("--- Select ---"));
+
+		
+        $.each(data.locations, function(idx, item) {
+        	//console.log("appending to freezers " + item.name);
+        	$("#" + idPrefix + "_freezer").append($("<option/>").val(item.id).text(item.name));            	
+        }); 
+        console.log("setFreezerCascadeValue: freezer-->" + fId + "<--");
+        $("#" + idPrefix + "_freezer").val(fId);
+         
+        if ( fId !== null && fId !== "" ) {
+        	       
+	        url = urlPrefix + "freezer/" + fId + "/door";
+	        $.getJSON(url).done(function(data) {   				
+	        	
+	            $.each(data.locations, function(idx, item) {
+	            	//console.log("appending to doors " + item.name);
+	            	$("#" + idPrefix + "_door").append($("<option/>").val(item.id).text(item.name));            	
+	            }); 
+	            $("#" + idPrefix + "_door").val(dId);
+	
+	            	
+	            if ( dId !== null && dId !== "" ) {
+		            url = urlPrefix + "door/" + dId + "/column";
+		            $.getJSON(url).done(function(data) {   				
+		            	
+		                $.each(data.locations, function(idx, item) {
+		                	//console.log("appending to cols " + item.name);
+		                	$("#" + idPrefix + "_column").append($("<option/>").val(item.id).text(item.name));            	
+		                }); 
+		                $("#" + idPrefix + "_column").val(cId);
+		                
+		                if ( cId !== null && cId !== "" ) {
+			                url = urlPrefix + "column/" + cId + "/tray";
+			                $.getJSON(url).done(function(data) {   				
+			                				                	
+			                    $.each(data.locations, function(idx, item) {
+			                    	
+			                    	var options = $("#" + idPrefix + "_tray");
+			                    	if ( item.box_count === undefined ) {
+							    		options.append($("<option/>").val(item.id).text(item.name));
+							    	} else {
+							    		if ( item.name === undefined || item.name.length == 0 ) {
+							    			options.append($("<option/>").val(item.id).text(item.name));
+							    		} else {
+                                            let totalContainers = Number(item.box_count) + Number(item.plate_count) + Number(item.rack_count) + Number(item.legacy_plate_count);
+
+					    		            //options.append($("<option/>").val(item.id).text(item.name + " [boxes: " + item.box_count + ", plates: " + item.plate_count + ", racks: " + item.rack_count + "]"));
+					    		            options.append($("<option/>").val(item.id).text(item.name + " [" + totalContainers + " containers]"));
+
+							    		}
+							    	}
+			                    	
+			                    });  
+			                    $("#" + idPrefix + "_tray").val(tId);
+			            	});	
+		                }
+			            
+		        	});	
+	            }
+	            
+	    	});	
+        }
+        
+	});	
+
+};
+
+function freezerCascade(selectOrigin, selectTarget, urlPrefix, urlSuffix) {
+		
+	var f = $(selectOrigin).val();
+	var options = $(selectTarget);
+	options.empty();
+ 
+	console.log("freezerCascade: selectOrigin val is " + f);
+	if ( f !== null && f.length > 0 ) {
+		//console.log("in freezerCascade: getting data for " + selectTarget);
+		var url = urlPrefix + f + urlSuffix;
+			
+		var promise = $.getJSON(url)
+			.done(function(data) {  		    
+				//console.log(selectTarget + " has data " + JSON.stringify(data.locations));
+				if ( data.locations.length == 0 ) {
+					options.append($("<option/>").val('').text("--- Select ---"));
+				} else {
+				    $.each(data.locations, function(idx, item) {
+				    	if ( item.box_count === undefined ) {
+				    		options.append($("<option/>").val(item.id).text(item.name));
+				    	} else {
+				    		if ( item.name === undefined || item.name.length == 0 ) {
+				    			console.log("item is undefined? " + item.name + " id = " + item.id);
+				    			options.append($("<option/>").val(item.id).text(item.name));
+				    		} else {
+                                console.log("boxes " + item.box_count);
+                                console.log("plates " + item.plate_count);
+                                console.log("racks " + item.rack_count);
+                                console.log("legacy " + item.legacy_plate_count);
+                                let totalContainers = Number(item.box_count) + Number(item.plate_count) + Number(item.rack_count) + Number(item.legacy_plate_count);
+                                          
+                                options.append($("<option/>").val(item.id).text(item.name + " [" + totalContainers + " containers]"));
+				    			//options.append($("<option/>").val(item.id).text(item.name + " [boxes: " + item.box_count + ", plates: " + item.plate_count + ", racks: " + item.rack_count + "]"));
+				    		}
+				    	}
+				    });
+				}
+				
+			  options.first().trigger('change'); 
+			})
+	        .fail( function(data) {      	
+				displayErrorPostItByData(data);	        	
+			});
+	} else {
+		console.log("freezerCascade: no target id for " + selectTarget + " so setting to empty");
+		options.empty();
+		options.append($("<option/>").val('').text("--- Select ---"));
+		options.first().trigger('change'); 
+	}	
+};
+
+function partialLocations(idPrefix, urlPrefix) {
+	// create the four select boxes for choosing a location
+	console.log("Creating 4 location select boxes");
+	
+	//var url = urlPrefix + "freezers/json";
+	
+	var selFreezer = createLocationSelect(urlPrefix, "freezer", idPrefix, "door");
+	$("#" + idPrefix + "_freezer_select").empty();
+	$("#" + idPrefix + "_freezer_select").append( selFreezer );
+	
+	var selDoor = createLocationSelect(urlPrefix, "door", idPrefix, "column");
+	$("#" + idPrefix + "_door_select").empty();
+    $("#" + idPrefix + "_door_select").append( selDoor );
+    
+    var selColumn = createLocationSelect(urlPrefix, "column", idPrefix, "tray");
+    $("#" + idPrefix + "_column_select").empty();
+    $("#" + idPrefix + "_column_select").append( selColumn );
+    
+    var selTray = createLocationSelect(urlPrefix, "tray", idPrefix);
+    $("#" + idPrefix + "_tray_select").empty();
+    $("#" + idPrefix + "_tray_select").append( selTray );
+    
+    setFreezerCascadeValue(idPrefix, urlPrefix, null, null, null, null);
+    return selFreezer;
+};
+
+function createLocationSelect(urlPrefix, selectName, idPrefix, childId,  url) {
+    
+    var selectId = idPrefix + "_" + selectName;   
+    var input = $("<select>", { "name": selectName + "_id", "id": selectId, "class": "form-control" });	    
+    //console.log("Created select box with id " + selectId);
+    if ( url ) {
+	    var promise = $.getJSON(url).done(function(data) {  
+        	// top level (freezers only)	        
+        	input.append($("<option/>").val("").text("--- Select ---"));
+            $.each(data.locations, function(idx, item) {
+            	//console.log("creating freezers " + item.name);
+            	input.append($("<option/>").val(item.id).text(item.name));            	
+            });
+        })
+        .fail( function(data) {         
+            displayErrorPostItByData(data);             
+        });
+    }	    
+    if ( childId ) {   
+    	//console.log("Adding change listener for child id is " + childId);
+	    input.on("change", function() {
+            console.log(selectId + " change triggered");           
+            var prefix = urlPrefix + selectName + "/";
+            var suffix = "/" + childId;
+            freezerCascade(this, "#" + idPrefix + "_" + childId, prefix, suffix );  
+        }); 
+    }	    
+    return input;	    
+};
+
+
+function highlightTableRow(itemInRow) {
+	$(itemInRow).closest("tr").addClass("selected-row");
+	$(itemInRow).closest("tr").siblings().removeClass("selected-row");
+};
+
+function populateBatch(url, prefix) {				
+	var promise = $.getJSON(prefix + url)
+		.done(function(data) {  
+			console.log("DONE populateBatch from " + url);
+			if (typeof data.batch !== 'undefined') {
+				if ( data.batch.status_id >= 3 ) {
+					$("#print_button").show();
+				}
+				// batch title and status:
+				$(".section-header").empty();
+				$(".section-header").append(data.batch.batch_name);
+				var statusMarker = $("<span>").addClass("author").addClass("pull-right").html(data.batch.status_desc + ", " + data.batch.sample_count + " samples");
+				$(".section-header").append( statusMarker);
+				
+				$("#batch_detail").empty();				
+				// run order table			
+				$.each( data.batch_items, function(idx, sample) {	
+					
+					var input = $('<input>', {type:"checkbox", name:"excluded", value:sample.id});
+					if ( sample.excluded === true ) { 
+						input.attr('checked',true);
+					}
+
+					$('#target_container').append(input);
+					
+					$("#batch_detail").append( $('<tr/>')
+							.append($('<td/>').html(idx+1))
+							.append($('<td/>').html(sample.event_name))
+							.append($('<td/>').html(sample.tube_label))
+							.append($('<td/>').html(sample.tube_notes))
+							.append($('<td/>').append(input))
+							);					
+				});	
+			}
+		})
+        .fail( function(data) { 	
+			displayErrorPostItByData("#batch_detail", data, ".error-message");
+		});
+	return promise;
+};
+
+function populateBatchSummary(url, prefix) {		
+	var promise = $.getJSON(prefix + url)
+		.done(function(data) {   				
+			
+			$(".section-header").empty();
+			$("#boxes").empty();
+			$("#plates").empty();
+			$(".section-header").append(data.batch.batch_name);
+									
+			$("#sample_count").html( data.batch.sample_count);
+			//$("#status").html( data.batch.status_desc);
+			//$("#biofluid").html( data.batch.sample_type);
+
+			$.each( data.boxes, function(idx, box) {					
+				var td = $('<p/>').append(box.label);
+				$("#boxes").append(td)	;	
+
+			});
+			$.each( data.plates, function(idx, plate) {	
+				var td = $('<p/>').append(plate.barcode);
+				$("#plates").append(td)	;			
+			});
+		})
+        .fail( function(data) { 		
+			displayErrorPostItByData(data);("#global_error", data, ".error-message");
+		});
+	return promise;
+};
+
+function populatePlates(url, prefix) {
+	console.log("About to call populatePlates with " + url);
+	var promise = $.getJSON(prefix + url)
+		.done(function(data) {
+			if ( data.plates.length > 0 ) {
+				
+			
+				$("#plate_detail").empty();		
+				$.each( data.plates, function(idx, plate) {		
+				
+					var link = $("<a>").append(plate.barcode);
+					link.attr("href", prefix + "plate/" + plate.id);
+					var td = $("<td/>");
+					td.append(link);
+					$("#plate_detail").append( $('<tr/>')
+							.append(td)				
+							.append($('<td/>').html(plate.protocol_name))
+							.append($('<td/>').html(plate.technology))
+							.append($('<td/>').html(plate.method))
+							.append($('<td/>').html(plate.freezer))
+							);					
+				});	
+			} else {
+				$("#plate_detail").append( $('<tr/>')
+						.append($('<td/>').html("No plates saved yet in batch")));			
+			}
+		})
+        .fail( function(data) { 	
+        	console.log("FAIL populatePlates at " + url);
+			displayErrorPostItByData(data);
+		});
+	return promise;
+};
+
+function populateAssays(url, prefix) {	
+	var promise = $.getJSON(prefix + url)
+		.done(function(data) {   				
+			$("#project_assays").empty();
+			
+			$.each( data.assays, function(idx, assay) {				
+				var tr = $("<tr/>");
+				var td = $("<td/>");
+				
+				var protLink = $("<a>").append(assay.assay_name);
+				protLink.attr("href", prefix + "assay/" + assay.id);
+				td.append( protLink );
+				tr.append(td);
+				tr.append( $("<td/>").attr("class", "tablelabel").append(assay.preplist_count));
+				tr.append( $("<td/>").attr("class", "tablelabel").append(assay.runlist_count));
+				if ( assay.preplist_count == 0 && assay.runlist_count == 0) {
+					var trashLink = makeTrashButton();
+					trashLink.attr("class", "del-assay");
+					trashLink.attr("data-id", assay.id);
+					tr.append( $("<td/>").append(trashLink));
+				} else {
+					tr.append( $("<td/>"));
+				}
+				$("#project_assays").append(tr);
+			});			
+		})
+        .fail( function(data) { 		
+        	console.log("failed to populate assays " + JSON.stringify(data));
+			displayErrorPostItByData(data);
+		});
+	return promise;
+};
+
+function populateProtocolsForBatch(url, selectId) {	
+	var promise = $.getJSON(url)
+		.done(function(data) {   				
+			$("#" + selectId).empty();
+			$("#" + selectId).append($("<option/>").attr("value", "").append("Backup"));
+			$.each( data.batch_protocols, function(idx, protocol) {
+			
+				var o = $("<option/>");
+				o.attr("value", protocol.id);
+				var description = protocol.protocol_name + " " + protocol.sample_type + " " + protocol.technology + " ";
+				if ( protocol.method != null ) description += protocol.method;
+				o.append(description);
+				$("#" + selectId).append(o);
+			});			
+		})
+        .fail( function(data) { 		
+			console.log("failed to populate protocols " + JSON.stringify(data));
+			displayErrorPostItByData(data);
+		});
+	return promise;
+};
+
+function populateBatchesForProject(url, prefix) {	
+	//console.log("Getting project batches from " + url);
+	var promise = $.getJSON(prefix + url)
+		.done(function(data) {   			
+			if ( data.batches.length == 0 ) {
+				console.log("disabling log button");
+				$("#btn_log_samples").attr("disabled", true);
+			} else {
+				// build the ready-batch list (if status > 2)
+				if (typeof data.project !== 'undefined') {
+					$.each( data.project.project_samples, function(idx, sample) {	
+						
+						var td = $("<td>").attr("id", sample.sample_type_id);
+						$("#project_batches").append(td);						
+					});
+					$.each( data.batches, function(idx, batch) {	
+						
+						if ( batch.status_id > 2 ) {
+							var batchLink = $("<a>").append(batch.batch_name + " [" + batch.status_desc + "]").append($("<br>"));
+							batchLink.attr("href", prefix + "batch/" + batch.id);
+							$("#" + batch.sample_type_id).append(batchLink);
+						}
+					});
+				}	
+			}
+		})
+        .fail( function(data) { 		
+			console.log("failed to populate batch " + JSON.stringify(data));
+			displayErrorPostItByData(data);
+		});
+	return promise;
+};
+
+function makeFlagButton() {	
+	var icon = $("<i/>"); 
+	icon.addClass("notes fas fa-pencil fa-fw");			
+	return icon;
+}
+
+function makeTrashButton() {	
+	var icon = $("<i/>"); 
+	icon.addClass("fas fa-trash");
+	icon.attr("aria-hidden", "true");			
+	var btn = $("<a>").attr("href", "#");
+	btn.append(icon);
+	return btn;
+}
+
+function emptyBox( spaceClass, sampleType ) {	
+	
+	//console.log("EMPTY " + spaceClass + " of type sample_" + sampleType);
+	var tube = $( spaceClass ); // tube or well
+	tube.attr("data-content", "");
+	tube.removeClass("fa-notes-icon");
+	//tube.find('span').attr("data-pos", ""); // remove the grid reference
+	tube.find("button").removeClass();
+	tube.find("button").addClass("btn btn-outline btn-circle");
+	//var button = tube.find("button").removeClass("sample_" + sampleType);
+	var popOver = tube.find("a");
+	popOver.attr("data-content", "");  
+	popOver.attr("data-original-title", "Empty");  	
+}
+
+function populateSquare( square, data, sampleType) {
+	
+	if ( data.sample_id != null ) {
+		//console.log("In function populateSquare with sample " + data.sample_id);
+		square.find('button').addClass("sample_" + sampleType); 
+		//square.find('span').attr("data-pos", data.pos_desc); 
+		//console.log("Set sample pos " + JSON.stringify(data.pos_desc));
+		 // add popover		
+		if ( data.event_name ) {
+			//console.log('got data.event_name ' + data.event_name);
+			square.find("a").attr("data-original-title", "Sampling event " + data.event_name);  
+		} else {
+			square.find("a").attr("data-original-title", "");  
+		}
+		
+		var popOverText = "Sample class: " + data.sample_class;
+		if ( data.sample_type ) popOverText = popOverText + " [" + data.sample_type + "]";
+		if ( data.tube_label ) popOverText = popOverText + "<br/>Tube label: " + data.tube_label;
+		if ( data.tube_barcode ) popOverText = popOverText + "<br/>Tube barcode: " + data.tube_barcode;
+		if ( data.subject_label ) popOverText = popOverText + "<br/>Subject: " + data.subject_label;
+		if ( data.subject_class ) popOverText = popOverText + "<br/>Subject class: " + data.subject_class;
+		if ( data.age ) popOverText = popOverText + "<br/>Age: " + data.age;
+		if ( data.gender ) popOverText = popOverText + "<br/>Gender: " + data.gender;	
+		if ( data.tube_notes ) popOverText = popOverText + "<br/>Tube notes: " + data.tube_notes;		
+		//console.log("Setting pop-over to " + popOverText);								
+		square.find("a").attr("data-content", popOverText);     
+		// add label
+
+		var displayText = defaultTextCheck(data.tube_barcode, data.tube_label);		
+		
+		// draw a flash if there's a note
+		if ( data.tube_notes != null && data.tube_notes.length > 0 ) {
+			
+			square.addClass("fa-notes-icon");		
+		} 		
+		square.attr("data-content", displayText ); 
+		
+	} 
+}
+
+function defaultTextCheck(defaultText, fallbackText) {
+	var displayText = defaultText;	
+	if ( displayText == null || displayText == "" || displayText == "NA") {
+		displayText = fallbackText;		
+	}
+	return displayText;
+}
+
+function selectElementContents(el) {
+    var body = document.body, range, sel;
+    if (document.createRange && window.getSelection) {
+        range = document.createRange();
+        sel = window.getSelection();
+        sel.removeAllRanges();
+        try {
+            range.selectNodeContents(el);
+            sel.addRange(range);
+        } catch (e) {
+            range.selectNode(el);
+            sel.addRange(range);
+        }
+        document.execCommand("copy");
+
+    } else if (body.createTextRange) {
+        range = body.createTextRange();
+        range.moveToElementText(el);
+        range.select();
+        range.execCommand("copy");
+    }
+}
+
+function populateHTMLContainer(data, container) {
+	//console.log(JSON.stringify(data));
+	var td = $("#" + container + "_" + data.pos_desc);	
+	
+	if ( data.sample_id != null ) {
+		// add label
+
+		displayText = defaultTextCheck(data.tube_barcode, data.tube_label);	 		
+		/* long term or study reference */
+		if ( displayText == null || displayText.trim().length == 0 ) {
+			displayText = data.sample_class;
+		}
+		//console.log("Data content is " + displayText);
+		td.html(displayText ); 
+	} 
+}
+
+function populatePlate(url, sampleTypeId) {	
+	console.log("In function populatePlate with " + url);
+	emptyBox(".well-centered", sampleTypeId);
+	
+	var promise = $.getJSON(url)
+		.done(function(data) {
+			console.log("Got plate data " + JSON.stringify(data));
+			if (typeof data.plate !== 'undefined') {			
+				$("#plate_label").html( data.plate.barcode);
+				var sampleType = data.plate.sample_type_id;
+				$.each( data.plate_wells, function(idx, obj) {
+					var well = $("#p_" + obj.pos_desc);			
+					//console.log("about to call populateSquare() for plate well " + obj.pos_desc);
+			    	populateSquare( well, obj, sampleType );		
+					
+			    });	 
+			}
+		})
+		.fail( function(data) { 		
+			displayErrorPostItByData(data);
+		});	
+	return promise;	
+}
+
+function populateBox(url, sampleTypeId, showPlate) {
+	console.log("About to populate Box for " + url);
+	
+	if ( showPlate == true) {
+		emptyBox(".well-centered", sampleTypeId);
+	}		
+	emptyBox(".tube-centered", sampleTypeId);
+	var promise = $.getJSON(url)
+		.done(function(data) {	
+			if (typeof data.box !== 'undefined') {
+				$("#box_heading").html( data.box.box_label);
+				var sampleType = data.box.sample_type_id;
+				$.each( data.box_tubes, function(idx, obj) {
+					var tube = $("#" + obj.pos_desc);	
+					//console.log("about to call populateSquare for box " + obj.pos_desc);
+					populateSquare(tube, obj, sampleType);
+					populateHTMLContainer(obj, "box");
+			    });	
+				if ( showPlate==true ) {
+					
+					$.each( data.plate_wells, function(idx, obj) {
+						var well = $("#p_" + obj.pos_desc);		
+						console.log("about to call populateSquare for plate " + obj.pos_desc);
+				    	populateSquare( well, obj, sampleType );
+				    	populateHTMLContainer(obj, "plate");
+				    });	
+				}
+			}
+		})
+		.fail( function(data) { 		
+			console.log("FAIL populateBox for " + url);
+			displayErrorPostItByData(data);
+		});
+	
+	return promise;
+}
+
+function drawSlideLayout( tableId, slides ) {
+	var data = {};
+	try {		
+		//console.log("drawSlideLayout.slides " + slides);
+		if ( slides != null && slides.length > 0 ) {
+			data = JSON.parse(slides);
+			//console.log(data);
+			var slideCount = data.slides.length;		
+			var layoutRows = data.layout_rows;		
+			var layoutCols = data.layout_cols;						
+			var count = 0;
+			
+			outerloop:
+			for ( var i = 0; i < layoutRows; i++ ) {
+				var tr = $("<tr/>");
+				
+				tableId.append(tr);
+				for ( var j = 0; j<layoutCols; j++ ) {					
+					var td = $("<td/>");					
+					td.html( drawSlide(data.slides[count] ));
+					tr.append(td);
+					count++;
+					if ( count == slideCount ) break outerloop;
+				}				
+			}	
+		}
+	 }
+	 catch(err) {
+		 console.log(err);
+	 }
+	return true;
+};
+/* draw single slide using divs */
+function drawSlide(slide) {
+	
+	var count = 0;
+	//console.log("Drawing " + JSON.stringify(slide));
+	var qc = slide.qc_position;
+	var rows = slide.rows;
+	var cols = slide.cols;
+	
+	var qcTD = $("<td/>");
+	qcTD.attr("rowspan", rows);
+	var qcDiv = $("<div class='slides-qc'/>");
+	qcDiv.html("QC");
+	qcTD.append(qcDiv);
+			
+	var slideBorder = $("<table class='slides-table'/>");
+	var thead = $("<thead/>");
+	var th = $("<th/>");
+	if ( qc=="none") {
+		th.attr("colspan", cols);
+	}
+	else {
+		th.attr("colspan", cols+1);
+	}
+	
+	var slideBarcode = slide.barcode;
+	/* show slide is as copy on screen */
+	if ( slide.discarded ) {
+		slideBarcode = "COPY " + slide.barcode;
+	}
+	
+	th.html(slideBarcode);
+	thead.append(th);
+	slideBorder.append(thead);
+	
+	var tbody = $("<tbody/>");
+	
+	slideBorder.append(tbody);
+	
+	for ( var x = 0; x < rows; x++ ) {
+		
+		var tr = $("<tr/>");
+		tbody.append(tr);
+					
+		if ( x==0 && qc=="left") {
+			tr.append(qcTD);
+		} 
+					
+		for ( var y = 0; y<cols; y++ ) {
+			
+			var td = $("<td/>");
+			var divEvent = $("<div class='slides-event'/>");
+			var divSection = $("<div class='slides-centered'/>");
+			var section = slide.sections_view[count];
+			
+			//console.log('drawSlide.section ' + JSON.stringify(section));
+			if ( count < slide.sections_view.length ) {					
+				divEvent.html( section.event_name );					
+				divSection.html( section.section_label );				
+			} else {				
+				divSection.removeClass("slides-centered");
+				divSection.addClass("slides-empty");
+				
+				divSection.html( "&nbsp;" );				
+			}	
+			td.append(divEvent);
+			td.append(divSection);
+			tr.append(td);
+			count++;			
+		}
+		if ( x==0 && qc=="right") {				
+			tr.append(qcTD);
+		}
+	}
+	return slideBorder;
+};
+
+
+function serializeWithLists ( form ) {
+	  
+	var arrayData = form.serializeArray();
+ 	var objectData = {};
+
+	$.each(arrayData, function() {
+    	
+    	var value = "";
+
+	    if (this.value != null) {			
+	    	value = this.value;
+	    } 
+		//console.log(this.name + " = " + value);
+		
+	    if (objectData[this.name] != null) {
+	      if (!objectData[this.name].push) {
+	        objectData[this.name] = [objectData[this.name]];
+	      }
+	      objectData[this.name].push(value);
+	    } else {
+	      objectData[this.name] = value;
+	    }
+	  });
+	  
+	  console.log("serializeWithLists is " + JSON.stringify(objectData));
+	  return objectData;
+};
+	
+function serializeForm (form) {
+	var serialized = {};
+	
+	$.each(form.serializeArray(),
+		function() {
+			serialized[this.name] = serialized[this.name] ? serialized[this.name]
+					.split(',')
+					: [];
+			serialized[this.name] = serialized[this.name]
+					.concat(this.value).join(',');
+		});
+	//console.log("serializeForm is " + JSON.stringify(serialized));
+	return serialized;
+};
+
+escape = function (str) {
+	  return str
+	    .replace(/[\\]/g, '\\\\')
+	    .replace(/[\"]/g, '\\\"')
+	    .replace(/[\/]/g, '\\/')
+	    .replace(/[\b]/g, '\\b')
+	    .replace(/[\f]/g, '\\f')
+	    .replace(/[\n]/g, '\\n')
+	    .replace(/[\r]/g, '\\r')
+	    .replace(/[\t]/g, '\\t');
+	};
+	
+function htmlDecode(input){
+	var out = "";
+
+	if ( input && input.length > 0 ) {
+	  var e = document.createElement('textarea');
+	  // '/g' means 'global'
+	  var inputStr = input.replace(/[\n]/g, '\\n')
+	    					.replace(/[\r]/g, '\\r');
+	  //console.log("replaced " + inputStr);
+	  
+	  e.innerHTML = inputStr;
+	  //console.log("htmlDecode IN: " + input);
+	  // handle case of empty input
+	  var out = e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+	  //console.log("htmlDecode OUT: " + out);
+	  return out;
+	}
+}
+
+function escapeHTML(str) {
+	var inputStr = str.replace('/', '%2F');
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(inputStr));
+    return div.innerHTML;
+}
+
+
+function ajaxDelete(objJSON, url, beforeMsg="") {
+	
+	var jqxhr = $.ajax({		
+			beforeSend: function( xhr ) {
+				if ( beforeMsg.length > 0 )  return confirm(beforeMsg); 
+				else return true;
+		  },
+		  processData: false, method: "DELETE", url: url,  contentType: "application/json", dataType: "json", data: JSON.stringify(objJSON)
+		})
+		.fail( function(data) { 
+            // beforesend false will trigger this too	
+           
+            if ( data.status > 0 ) {
+			     displayErrorPostItByData(data);
+			} else {
+                console.log("Not displaying status after delete " + data.status);
+            }
+		});
+	return jqxhr;
+};
+/* JQuery form identifier, method="POST" or "PUT" */
+function ajaxSendFormData(formId, method) {
+	 
+	var formObj = $("#" + formId);
+	var formAction = formObj.attr('action');
+		
+	var entity = serializeWithLists( formObj );	
+	var formJSON = JSON.stringify(entity);
+	
+ 	console.log("Form " + method + " to " + formAction);
+ 	console.log("Form data is " + formJSON);
+ 	
+	return $.ajax({			
+		processData: false, method: method,  url: formAction, contentType: 'application/json', dataType: 'json', data: formJSON
+	}).fail( function(data) { 
+		displayErrorPostItByData(data);
+	});
+};
+
+function ajaxPostForm(formId) {
+	 
+	var formObj = $("#" + formId);
+	var formTarget = formObj.attr('action');		
+	var entity = serializeWithLists( formObj );
+	var formJSON = JSON.stringify(entity);
+ 
+	return $.ajax({			
+	  'processData': false,
+	  'method': "POST",
+	  'url': formTarget,
+	  'contentType': 'application/json',
+	  'dataType': 'json',
+	  'data': formJSON
+	});
+};
+
+function updateEntity( formId, target ) {
+  	var entity = serializeForm($(formId));
+  	/* force unchecked checkboxes to appear */
+    $(formId + " input:checkbox").each(function(){
+        entity[this.name] = this.checked;
+    });
+    console.log("Adding checkboxes " + JSON.stringify(entity));
+  	
+	var jqxhr = $.ajax({
+		  processData: false,
+		  method: "PUT",
+		  url: target,
+		  contentType: "application/json",
+		  dataType: "json",
+		  data: JSON.stringify(entity)
+		})
+		.fail( function(data) { 
+			displayErrorPostItByData(data);
+		});		
+	return jqxhr;  	
+};
+
+function ajaxPUTObject( o, url ) {
+	return $.ajax({
+		  processData: false,
+		  method: "PUT",
+		  url: url,
+		  contentType: "application/json",
+		  dataType: "json",
+		  data: JSON.stringify(o)
+		}).fail( function(data) { 
+            displayErrorPostItByData(data);
+        });
+}
+
+function displayErrorPostItByData(data) {	
+	
+	var message = "";
+	console.log("displayErrorPostItByData data: " + JSON.stringify(data));
+	if ( data.hasOwnProperty("message")) {
+		console.log("Showing data.message " + JSON.stringify(data.message));
+		message = data.message;
+	}
+	else if ( data.hasOwnProperty('responseJSON') && data.responseJSON !==undefined ) {
+		console.log("Showing data.responseJSON " + JSON.stringify(data.responseJSON));
+		message = data.responseJSON.message;	
+	} 
+	else if ( data.hasOwnProperty('responseText') ) {
+		console.log("Showing data.responseText " + JSON.stringify(data.responseText));
+		message = data.responseText;	
+	}
+	else {
+		console.log("Showing data.statusText: " + data.statusText);
+		message = data.statusText;
+	}
+	displayErrorPostIt(message, "#global_error");
+	
+};
+
+function displayErrorPostIt(msg, where) {
+
+	//if ( msg ) {
+		var container = $(".error-post-it");
+		container.html( msg );	
+		console.log("Error message " + msg);
+		container.parent().insertAfter(where);
+		container.parent().show();
+	//}
+	//return null;
+};
+
+function displayUserPostIt(msg, where) {
+
+	if ( msg ) {
+		var container = $(".user-post-it");
+		container.html( msg );	
+		container.parent().insertAfter(where);
+		container.parent().show();
+	}
+	return null;
+};
+
+
+
+$(function() {	
+
+
+	 $("#datepicker").datepicker({
+        format: 'dd-mm-yyyy',
+        autoclose: true,
+        todayBtn: 'linked',
+        useCurrent: true
+    })
+
+	$("input[type=checkbox]").on("click", function(e) { 
+		if  ( this.dataset.target ) {
+			console.log('lims.js checkbox target ' + JSON.stringify(this.dataset.target));
+			var checked = $(this).is(':checked');
+	        if ( checked ) {
+	        	
+	            $('.' + this.dataset.target).show();
+	        } else {
+	        	$('.' + this.dataset.target).hide();
+	        }
+		}
+    });
+	
+	$("#check_all").click(function(){
+	    $('input:checkbox.check-all').not(this).prop('checked', this.checked);
+	});	
+	$(".error-close").on("click", function(e) {
+		e.preventDefault();		
+		//$(".post-it").hide();
+		$(this).parent().hide();
+	});
+ });
