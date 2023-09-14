@@ -1,0 +1,4 @@
+.space-line {
+    display: block;
+    height: 1em; /* Adjust this value to increase or decrease the space */
+}
